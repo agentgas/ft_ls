@@ -32,7 +32,7 @@ $(NAME):
 
 clean:
 	make -C ./libft/ clean
-	rm -f $(NAME)
+	rm -f $(HEAD)
 
 fclean: clean
 	make -C ./libft/ fclean
