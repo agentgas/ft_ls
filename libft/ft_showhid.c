@@ -1,0 +1,159 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_showhid.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: glovichi <glovichi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2013/12/14 12:41:48 by glovichi          #+#    #+#             */
+/*   Updated: 2013/12/15 16:30:16 by glovichi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <pwd.h>
+#include <grp.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include "ls.h"
+
+void	ft_hidedot()
+{
+	DIR				*arep;
+	struct dirent	*within;
+
+	arep = opendir(".");
+	while ((within = readdir(arep)) != NULL)
+	{
+		if ((within->d_name)[0] != '.')
+		{
+			ft_putstr(within->d_name);
+			ft_putstr("\n");
+		}
+	}
+	closedir(arep);
+}
+
+void	ft_longd(struct dirent *within)
+{
+	struct stat		stats;
+	struct passwd	*pwd;
+	struct group	*grp;
+
+	stat(within->d_name, &stats);
+	pwd = getpwuid(stats.st_uid);
+	grp = getgrgid(stats.st_gid);
+	ft_lnknbr(stats.st_nlink);
+	ft_putstr(" ");
+	ft_putstr(pwd->pw_name);
+	ft_putstr("  ");
+	ft_putstr(grp->gr_name);
+	ft_putstr("  ");
+	ft_affsize(stats.st_size);
+	ft_putstr(" ");
+	ft_timedis(within);
+	ft_putstr("  ");
+	ft_putstr(within->d_name);
+	ft_putstr("\n");
+}
+
+void	ft_timedis(struct dirent *within)
+{
+	struct stat	stats;
+	struct tm	*bttf;
+
+	stat(within->d_name, &stats);
+	bttf = gmtime(&(stats.st_mtime));
+	ft_choosemonth(bttf->tm_mon);
+	ft_putstr(" ");
+	ft_putnbr(bttf->tm_mday);
+	ft_putstr(" ");
+	if (bttf->tm_isdst == 0)
+		bttf->tm_hour += 1;
+	if (bttf->tm_hour < 10)
+		ft_putnbr(0);
+	ft_putnbr(bttf->tm_hour);
+	ft_putstr(":");
+	if (bttf->tm_min < 10)
+		ft_putnbr(0);
+	ft_putnbr(bttf->tm_min);
+}
+
+void	ft_choosemonth(int month)
+{
+	if (month == 0)
+		ft_putstr("Jan");
+	if (month == 1)
+		ft_putstr("Feb");
+	if (month == 2)
+		ft_putstr("Mar");
+	if (month == 3)
+		ft_putstr("Apr");
+	if (month == 4)
+		ft_putstr("May");
+	if (month == 5)
+		ft_putstr("Jun");
+	if (month == 6)
+		ft_putstr("Jul");
+	if (month == 7)
+		ft_putstr("Aug");
+	if (month == 8)
+		ft_putstr("Sep");
+	if (month == 9)
+		ft_putstr("Oct");
+	if (month == 10)
+		ft_putstr("Nov");
+	if (month == 11)
+		ft_putstr("Dec");
+}
+
+void	ft_affsize(int sizeint)
+{
+	float	size;
+
+	size = sizeint;
+	if (size < 1024)
+		{
+			if (size < 10)
+				ft_putstr("  ");
+			ft_putnbr(size);
+			ft_putstr(" b");
+		}
+	else if (size >= 1024 && size < 1048576)
+		{
+			size = size / 1024;
+			if (size < 100 && size >= 10)
+				ft_putstr(" ");
+			else if (size < 10)
+				ft_putstr("  ");
+			ft_putnbr(size);
+			ft_putstr(" K");
+		}
+	else if (size >= 1048576 && size < 1073741824)
+		{
+			size = size / 1048576;
+			if (size < 100 && size >= 10)
+				ft_putstr(" ");
+			else if (size < 10)
+				ft_putstr("  ");
+			ft_putnbr(size);
+			sizeint = sizeint % 1048576;
+			sizeint = sizeint / 100000;
+			ft_putstr(",");
+			ft_putnbr(sizeint);
+			ft_putstr(" M");
+		}
+	else if (size >= 1073741824 && size < 1099511627776)
+		{
+			size = size / 1024;
+			ft_putnbr(size);
+			ft_putstr(" G");
+		}
+	else if (size >= 1099511627776 && size < 1125899906842624)
+		{
+			size = size / 1024;
+			ft_putnbr(size);
+			ft_putstr(" T");
+		}
+	ft_putstr(" ");
+}
