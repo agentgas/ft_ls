@@ -6,7 +6,7 @@
 #    By: glovichi <glovichi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/25 13:34:21 by glovichi          #+#    #+#              #
-#    Updated: 2013/12/15 18:52:36 by glovichi         ###   ########.fr        #
+#    Updated: 2015/02/21 16:30:40 by glovichi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,21 @@ SRC = ft_backwrd.c		\
 	  ft_putstr.c		\
 	  ft_showhid.c		\
 	  ft_strlen.c		\
-	  ft_subside.c
+	ft_strcmp.c		\
+	  ft_subside.c		\
+	  ft_strjoin.c		\
+	  ft_putendl.c		\
+	  ft_strdup.c		\
+	  ft_list_train.c	\
+	  ft_little_r.c		\
+	  ft_ord_list.c		\
+	  ft_rev_ord_list.c	\
+	  ft_time_sort.c	\
+		ft_longlong.c	\
+		ft_itoa.c		\
+		ft_list_long.c
 
-HEAD = ./includes/
+HEAD = -I./includes
 
 CC = gcc
 
@@ -32,16 +44,17 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar rc $(NAME) $(OBJ)
-	ranlib $(NAME)
+	@ar rc $(NAME) $(OBJ)
+	@ranlib $(NAME)	
+	@echo Libft okay Sir
 
 clean:
-	rm -f $(OBJ)
+	@rm -f $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 .c.o:
-	$(CC) $(CFLAGS) -I $(HEAD) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 re:	fclean all

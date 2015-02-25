@@ -6,11 +6,11 @@
 /*   By: glovichi <glovichi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/12/15 15:44:15 by glovichi          #+#    #+#             */
-/*   Updated: 2013/12/15 15:53:56 by glovichi         ###   ########.fr       */
+/*   Updated: 2015/02/18 16:45:35 by glovichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ls.h"
+#include "./includes/ls.h"
 
 void	ft_lnknbr(int link)
 {

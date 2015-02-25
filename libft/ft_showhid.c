@@ -6,7 +6,7 @@
 /*   By: glovichi <glovichi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/12/14 12:41:48 by glovichi          #+#    #+#             */
-/*   Updated: 2013/12/15 16:30:16 by glovichi         ###   ########.fr       */
+/*   Updated: 2015/02/20 15:46:56 by glovichi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,27 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <stdlib.h>
-#include "ls.h"
+#include "./includes/ls.h"
 
-void	ft_hidedot()
+void	ft_hidedot(void)
 {
 	DIR				*arep;
 	struct dirent	*within;
+	struct stat		st;
+	t_list			*namy;
 
 	arep = opendir(".");
 	while ((within = readdir(arep)) != NULL)
 	{
 		if ((within->d_name)[0] != '.')
 		{
-			ft_putstr(within->d_name);
-			ft_putstr("\n");
+			stat(within->d_name, &st);
+			ft_add_lnk(ft_nl(within->d_name, st.st_mtime), &namy);
 		}
 	}
 	closedir(arep);
+	ft_ord_list(namy);
+	ft_print_list(&namy);
 }
 
 void	ft_longd(struct dirent *within)
@@ -107,53 +111,16 @@ void	ft_choosemonth(int month)
 		ft_putstr("Dec");
 }
 
-void	ft_affsize(int sizeint)
+void	ft_affsize(int size)
 {
-	float	size;
-
-	size = sizeint;
-	if (size < 1024)
-		{
-			if (size < 10)
-				ft_putstr("  ");
-			ft_putnbr(size);
-			ft_putstr(" b");
-		}
-	else if (size >= 1024 && size < 1048576)
-		{
-			size = size / 1024;
-			if (size < 100 && size >= 10)
-				ft_putstr(" ");
-			else if (size < 10)
-				ft_putstr("  ");
-			ft_putnbr(size);
-			ft_putstr(" K");
-		}
-	else if (size >= 1048576 && size < 1073741824)
-		{
-			size = size / 1048576;
-			if (size < 100 && size >= 10)
-				ft_putstr(" ");
-			else if (size < 10)
-				ft_putstr("  ");
-			ft_putnbr(size);
-			sizeint = sizeint % 1048576;
-			sizeint = sizeint / 100000;
-			ft_putstr(",");
-			ft_putnbr(sizeint);
-			ft_putstr(" M");
-		}
-	else if (size >= 1073741824 && size < 1099511627776)
-		{
-			size = size / 1024;
-			ft_putnbr(size);
-			ft_putstr(" G");
-		}
-	else if (size >= 1099511627776 && size < 1125899906842624)
-		{
-			size = size / 1024;
-			ft_putnbr(size);
-			ft_putstr(" T");
-		}
+	if (size > 9 && size <= 99)
+		ft_putstr("   ");
+	else if (size > 99 && size <= 999)
+		ft_putstr("  ");
+	else if (size > 999 && size <= 9999)
+		ft_putstr(" ");
+	else if (size < 10)
+		ft_putstr("    ");
+	ft_putnbr(size);
 	ft_putstr(" ");
 }
